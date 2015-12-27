@@ -8,14 +8,18 @@ var bodyParser = require('body-parser');
 var compress = require('compression');
 var methodOverride = require('method-override');
 
-module.exports = function(app, config) {
+var session=require('express-session');
+var MongoStore=require('connect-mongo')(session);
+var settings=require('./settings');
+var flash=require('connect-flash');
+module.exports = function(app, config,db) {
   var env = process.env.NODE_ENV || 'development';
   app.locals.ENV = env;
   app.locals.ENV_DEVELOPMENT = env == 'development';
   
   app.set('views', config.root + '/app/views');
   app.set('view engine', 'ejs');
-
+  app.use(flash());
   // app.use(favicon(config.root + '/public/img/favicon.ico'));
   app.use(logger('dev'));
   app.use(bodyParser.json());
@@ -26,6 +30,16 @@ module.exports = function(app, config) {
   app.use(compress());
   app.use(express.static(config.root + '/public'));
   app.use(methodOverride());
+
+  //设置session
+ app.use(session({
+     secret:settings.cookieSecret,
+      key:settings.db,//cookie name
+      cookie:{maxAge:1000*60*60*24*30},//30days
+      store:new MongoStore({
+       mongooseConnection:db
+      })
+  }));
 
   var controllers = glob.sync(config.root + '/app/controllers/*.js');
   controllers.forEach(function (controller) {

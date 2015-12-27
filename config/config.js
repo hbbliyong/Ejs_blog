@@ -9,7 +9,7 @@ var config = {
       name: 'ejs-blog'
     },
     port: 3000,
-    db: 'mongodb://localhost/ejs-blog-development'
+    db: 'mongodb://localhost/ejs-blog-db'
   },
 
   test: {
@@ -28,7 +28,7 @@ var config = {
     },
     port: 3000,
     db: 'mongodb://localhost/ejs-blog-production'
-  }
+  },
 };
 
 module.exports = config[env];
