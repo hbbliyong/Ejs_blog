@@ -12,6 +12,9 @@ router.get('/', function (req, res, next) {
     if (err) return next(err);
     res.render('index', {
       title: 'Generator-Express MVC',
+      html:'<h1>hello</h1>',
+      htmlstring:'<h1>hello</h1>',
+      supplies:['mop','broom','duster'],
       articles: articles
     });
   });
